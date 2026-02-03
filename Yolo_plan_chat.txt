@@ -1,0 +1,199 @@
+Super idee 👌 e un proiect foarte bun pentru CV. Hai să-ți dau un plan clar, pas cu pas, gândit exact pentru YOLO + Python + Jupyter Notebook, ca să știi ce faci în fiecare etapă.
+
+🎯 Scopul proiectului
+
+Să detectezi într-o imagine:
+
+câte bomboane sunt
+
+ce tip de bomboane (ex: Skittles, M&M, gumdrops etc.)
+
+Folosind:
+
+YOLO (v8 recomandat)
+
+Python
+
+Jupyter Notebook
+
+🧠 Tehnologia aleasă
+
+✔ YOLOv8 (Ultralytics)
+✔ Python 3.9+
+✔ Jupyter Notebook
+✔ OpenCV
+✔ Dataset custom (imagini cu bomboane)
+
+🗂️ Structura proiectului
+CandyDetection/
+│
+├── data/
+│   ├── images/
+│   │   ├── train/
+│   │   ├── val/
+│   │   └── test/
+│   ├── labels/
+│   │   ├── train/
+│   │   ├── val/
+│   │   └── test/
+│
+├── notebooks/
+│   ├── 01_explorare_date.ipynb
+│   ├── 02_antrenare_yolo.ipynb
+│   └── 03_detectie_si_numarare.ipynb
+│
+├── runs/            # rezultate YOLO
+├── data.yaml        # configurare dataset
+└── requirements.txt
+
+🧩 Etapa 1 – Colectarea imaginilor
+
+📸 Ai nevoie de 50–200 imagini minim (ideal 300+)
+
+Surse:
+
+poze făcute cu telefonul
+
+imagini de pe Google (atenție la calitate)
+
+bomboane pe:
+
+fundal alb
+
+fundal colorat
+
+suprapuse
+
+👉 Fiecare tip de bomboană = o clasă
+
+Ex:
+
+0 = Skittles
+1 = M&M
+2 = Gummy Bear
+3 = Candy Corn
+
+✏️ Etapa 2 – Etichetarea imaginilor
+
+Folosește LabelImg sau Roboflow
+
+📦 Format YOLO:
+
+<class_id> <x_center> <y_center> <width> <height>
+
+
+✔ câte un fișier .txt pentru fiecare imagine
+✔ bounding box pentru fiecare bomboană
+
+🧪 Etapa 3 – Explorare date (Jupyter)
+
+Notebook: 01_explorare_date.ipynb
+
+Ce faci:
+
+verifici imaginile
+
+afișezi câteva cu bounding box
+
+verifici distribuția claselor
+
+import cv2
+import matplotlib.pyplot as plt
+
+🧠 Etapa 4 – Antrenarea YOLO
+
+Notebook: 02_antrenare_yolo.ipynb
+
+Instalare:
+!pip install ultralytics
+
+data.yaml
+path: data
+train: images/train
+val: images/val
+
+names:
+  0: Skittles
+  1: MM
+  2: GummyBear
+
+Antrenare:
+from ultralytics import YOLO
+
+model = YOLO("yolov8n.pt")
+
+model.train(
+    data="data.yaml",
+    epochs=50,
+    imgsz=640
+)
+
+
+📌 După training → modelul în runs/detect/train/weights/best.pt
+
+👁️ Etapa 5 – Detectarea bomboanelor
+
+Notebook: 03_detectie_si_numarare.ipynb
+
+model = YOLO("best.pt")
+
+results = model("test.jpg", conf=0.4)
+
+🔢 Etapa 6 – Numărarea pe tipuri
+from collections import Counter
+
+boxes = results[0].boxes
+classes = boxes.cls.tolist()
+
+count = Counter(classes)
+
+for cls_id, nr in count.items():
+    print(f"{model.names[int(cls_id)]}: {nr}")
+
+
+📊 Output exemplu:
+
+Skittles: 12
+MM: 8
+GummyBear: 3
+Total bomboane: 23
+
+📈 Etapa 7 – Vizualizare rezultate
+img = results[0].plot()
+plt.imshow(img)
+plt.axis("off")
+
+🏁 Etapa 8 – Extra (opțional, dar WOW)
+
+🔥 lucruri care impresionează:
+
+export model → .onnx
+
+detectare din webcam
+
+interfață simplă (Tkinter / Streamlit)
+
+grafic cu distribuția bomboanelor
+
+raport PDF cu rezultate
+
+🧠 Ce vei învăța
+
+✔ Computer Vision
+✔ Object Detection
+✔ Deep Learning
+✔ YOLO
+✔ Python + Jupyter
+✔ proiect real de AI
+
+Dacă vrei, pot:
+
+🧪 să-ți fac un notebook template
+
+🧷 să-ți dau dataset demo
+
+🧠 să te ajut pas cu pas ca la curs
+
+📝 să-ți scriu descrierea proiectului pentru CV
+
+Spune-mi 👉 pentru facultate sau CV? 😄
